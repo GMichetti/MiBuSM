@@ -2,5 +2,5 @@ __pycache__
 __pycache__*.*
 engine\mibu.log
 flaskr\database\*.*
-mibu_venv\Scripts\*.*
+venv
 *.log
