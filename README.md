@@ -1,4 +1,4 @@
-# Mibu 1.0.0
+# Mibu SM
 
 **Mibu** is a network device control and monitoring software designed to provide a comprehensive overview of your network infrastructure. The software is designed to be easily extensible to support additional devices.
 
