@@ -201,7 +201,7 @@ class Controller_Dell(Controller):
 
         try:
             self._session = ipmi.Command(
-                bmc=self._ip, userid=self._user, password=self._password, keepalive=True)
+                bmc=self._ip, userid=self._user, password=self._password)
 
         except Exception as err:
             logger.info(err)

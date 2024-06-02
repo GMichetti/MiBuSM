@@ -166,7 +166,7 @@ class Server(Device, Power_Continuity_Observer):
         Returns:
             dict: a result made by boolean and message string
         """
-        logger.info(f"login hv: {self._id}")
+        logger.info(f"check_hv_status: {self._id}")
         try:
             self._hypervisor.is_reachable()
             res = self._hypervisor.check_login()
