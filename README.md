@@ -52,7 +52,7 @@
 
 4. Configure MongoDB and Redis as per your setup requirements.
 
-5. check that log and lock files are created when necessary (see config_loader.py for default values) and/or have the correct permissions associated
+5. check that log and lock files are created when necessary (see `config_loader.py` for default values) and/or have the correct permissions associated
 
 6. Launch the necessary engine scripts:
     ```bash
