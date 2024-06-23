@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from retry import retry
 from libs.usb_vendor_xref import CODE
 import hid

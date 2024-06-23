@@ -40,7 +40,9 @@
 2. Create a virtual environment and activate it:
     ```bash
     python -m venv venv
-    venv\Scripts\activate
+    (windows) venv\Scripts\activate
+
+    (linux) source venv/bin/activate
     ```
 
 3. Install the required Python packages:
@@ -50,13 +52,18 @@
 
 4. Configure MongoDB and Redis as per your setup requirements.
 
-5. Launch the necessary engine scripts:
+5. check that log and lock files are created when necessary (see config_loader.py for default values) and/or have the correct permissions associated
+
+6. Launch the necessary engine scripts:
     ```bash
-    engine/python engine.py
-    engine/python auto_feeder.py
+    (windows) engine/python engine.py
+    (windows) engine/python auto_feeder.py
+
+    (linux) engine\python engine.py
+    (linux) engine\python auto_feeder.py
     ```
 
-6. Run the Flask server from the main folder:
+7. Run the Flask server from the main folder:
     ```bash
     flask --app flaskr.server run
     ```
@@ -108,8 +115,7 @@ Include screenshots here to showcase the interface and features.
 
 ## Version
 
-**[1.0.0] - 05-31-2024**
-In this first version , Mibu can communicate with Dell and Cisco servers, Fortinet firewalls, and CyberPower UPS systems.
+**[1.0.1] - 06-23-2024**
 
 
 ## Contributing

@@ -42,8 +42,8 @@ class ConfigModel(BaseModel):
     internal_db_action_status_list: str = "mibu_action_status_list"
     internal_db_msg_bkr_stats: str = "mibu_msg_bkr_stats"
     action_status_sb_pruning_time: PositiveInt = 60  # [minutes]
-    log_path: str = os.path.join("var", "logs", "Mibu","mibu.log") if os.name == 'posix' else os.path.join("C:\\", "var", "logs", "Mibu","mibu.log")
-    log_lock_file: str = os.path.join("var", "logs", "Mibu","log.lock") if os.name == 'posix' else os.path.join("C:\\", "var", "logs", "Mibu", "log.lock")
+    log_path: str = os.path.join("/var", "log","mibu.log") if os.name == 'posix' else os.path.join("C:\\", "var", "log", "mibu.log")
+    log_lock_file: str = os.path.join("/var", "log","mibu.lock") if os.name == 'posix' else os.path.join("C:\\", "var", "log","mibu.lock")
     max_bytes: PositiveInt = 1024 * 1024
     max_workers: PositiveInt = 4
     polling_cycle_heartbeat: PositiveInt = 5
