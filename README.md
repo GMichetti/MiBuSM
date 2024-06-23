@@ -32,20 +32,27 @@
 ### Installation
 
 1. Clone the repository:
+
     ```bash
     git clone https://github.com/gmichetti/mibusm.git
     cd mibu
     ```
 
 2. Create a virtual environment and activate it:
+    
+    (*windows*)
     ```bash
     python -m venv venv
-    (windows) venv\Scripts\activate
-
-    (linux) source venv/bin/activate
+    venv\Scripts\activate
+    ```
+    (*linux*)
+    ```bash
+    python -m venv venv
+    source venv/bin/activate
     ```
 
 3. Install the required Python packages:
+
     ```bash
     pip install -r requirements.txt
     ```
@@ -55,17 +62,26 @@
 5. check that log and lock files are created when necessary (see `config_loader.py` for default values) and/or have the correct permissions associated
 
 6. Launch the necessary engine scripts:
-    ```bash
-    (windows) engine/python engine.py
-    (windows) engine/python auto_feeder.py
 
-    (linux) engine\python engine.py
-    (linux) engine\python auto_feeder.py
+    (*windows*)
+    ```bash
+    engine/python engine.py
+    engine/python auto_feeder.py
+    ```
+    (*linux*)
+    ```bash
+    engine\python engine.py
+    engine\python auto_feeder.py
     ```
 
 7. Run the Flask server from the main folder:
+
     ```bash
     flask --app flaskr.server run
+    ```
+    or, if the Flask servers runs on an external machine:
+    ```bash
+    flask --app flaskr.server run --host=0.0.0.0
     ```
 
 ### Configuration
@@ -75,7 +91,7 @@ Modify the `config.yaml` file to set up the  configurations. If no file config f
 
 ## Usage
 
-Once the application is running, you can access the web interface through your browser at `http://localhost:5000`. The interface provides various functionalities to monitor and control your network devices.
+Once the application is running, you can access the web interface through your browser at `http://localhost:5000` (or the address where the server is running). The interface provides various functionalities to monitor and control your network devices.
 The default credentials are: 
 
 - user: "JackBurton"
