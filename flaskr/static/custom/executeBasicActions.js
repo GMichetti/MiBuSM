@@ -1,5 +1,3 @@
-import getURLConfig from "./config"
-
 // This file is a part of Mibu.
 
 // Copyright (C) 2024 Giuseppe Michetti <gius.michetti@gmail.com>

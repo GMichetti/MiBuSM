@@ -9,7 +9,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link rel="favicon" href="{{ url_for('static', filename="img/favicon.ico") }}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,6 +147,7 @@
     <script src="{{ url_for('static', filename="js/main.js") }}" ></script>
 
     <!-- Custom Javascript files -->
+    <script src="{{ url_for('static', filename="custom/config.js") }} "></script>
     <script src="{{ url_for('static', filename="custom/lineChartBuilder.js") }} "></script>
     <script src="{{ url_for('static', filename="custom/loadLogs.js") }} "></script>
     <script src="{{ url_for('static', filename="custom/refreshPerfNLogs.js") }} "></script>

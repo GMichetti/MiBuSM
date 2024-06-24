@@ -24,4 +24,3 @@ function getURLConfig() {
     return URL_CONFIG['CUSTOM_URL'] || URL_CONFIG['DEFAULT_URL'];
 }
 
-export default getURLConfig;
