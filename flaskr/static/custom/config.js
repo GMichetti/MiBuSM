@@ -15,31 +15,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import getURLConfig from "./config"
+let URL_CONFIG = {
+    "DEFAULT_URL": "http://127.0.0.1:5000",
+    "CUSTOM_URL": ""
+};
 
-function fetchPost() {
-  fetch(getURLConfig() + '/api/v1/devices_info')
-    .then(response => {
-
-      if (!response.ok) {
-        throw new Error('Request error');
-      }
-      return response.json();
-    })
-    .then(data => {
-      data.forEach((el) => {
-        buildHisto(el);
-        jsonViewer(el);
-        updateStatus(el)
-      });
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+function getURLConfig() {
+    return URL_CONFIG['CUSTOM_URL'] || URL_CONFIG['DEFAULT_URL'];
 }
 
-(() => {
-  fetchPost();
-  setInterval(fetchPost, 30000);
-})()
-
+export default getURLConfig;

@@ -80,10 +80,3 @@ function setClickListeners() {
     };
   })
 }
-
-// if (typeof (module) !== undefined && module.exports) {
-//   module.exports = {
-//     jsonToHTML,
-//     setClickListeners
-//   }
-// }

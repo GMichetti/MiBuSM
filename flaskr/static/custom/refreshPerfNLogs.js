@@ -15,8 +15,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import getURLConfig from "./config"
+
 function fetchPost() {
-  fetch('http://127.0.0.1:5000/api/v1/get_perf_n_logs')
+  fetch(getURLConfig()+ '/api/v1/get_perf_n_logs')
     .then(response => {
 
       if (!response.ok) {

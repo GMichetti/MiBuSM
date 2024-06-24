@@ -86,7 +86,9 @@
 
 ### Configuration
 
-Modify the `config.yaml` file to set up the  configurations. If no file config file is provided, will be used the default values (look at `config_loader.py`)
+1. Modify the `config.yaml` file to set up the engine configurations. If no file config file is provided, will be used the default values (look at `config_loader.py`)
+
+2. Modify the `config.js` file to set up the Flask server configuration. If no config is provided, will be used the default values
 
 
 ## Usage

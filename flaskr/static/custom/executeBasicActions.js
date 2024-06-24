@@ -1,3 +1,5 @@
+import getURLConfig from "./config"
+
 // This file is a part of Mibu.
 
 // Copyright (C) 2024 Giuseppe Michetti <gius.michetti@gmail.com>
@@ -17,7 +19,7 @@
 
 function button_action(data) {
     let action = data.split("?")[0]
-    let url = "http://127.0.0.1:5000/api/v1/set_state"
+    let url = getURLConfig() + "/api/v1/set_state"
     let id = data.split("?")[1]
     let payload = {}
     payload[action] = [id]
