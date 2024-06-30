@@ -44,7 +44,7 @@ class ConfigModel(BaseModel):
     action_status_sb_pruning_time: PositiveInt = 60  # [minutes]
     log_path: str = os.path.join("/var", "log","mibu.log") if os.name == 'posix' else os.path.join("C:\\", "var", "log", "mibu.log")
     log_lock_file: str = os.path.join("/var", "log","mibu.lock") if os.name == 'posix' else os.path.join("C:\\", "var", "log","mibu.lock")
-    max_bytes: PositiveInt = 1024 * 1024
+    max_bytes: PositiveInt = 128 * 128
     max_workers: PositiveInt = 4
     polling_cycle_heartbeat: PositiveInt = 5
     waiting_time: PositiveInt = 5
@@ -56,6 +56,7 @@ class ConfigModel(BaseModel):
     action_retry_delay: PositiveInt = 1
     action_retry_tries: PositiveInt = 2
     default_user_password: str = "Ch@ngeMe!"
+    worker_timeout = PositiveInt = 30
 
     @validator("auto_max_time_delta", pre=True, always=True, check_fields=True)
     def validate_max_time_delta(cls, value, values):

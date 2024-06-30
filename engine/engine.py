@@ -38,6 +38,7 @@ REQUEST_QUEUE = config_loader.config["msg_broker_request_queue"]
 DB = config_loader.config["internal_db"]
 DEV_LIST_COLLECTION = config_loader.config["internal_db_devs_list"]
 DEV_INFO_COLLECTION = config_loader.config["internal_db_devs_info"]
+WORKER_TIMEOUT = config_loader.config["worker_timeout"]
 
 
 class Engine(object):
@@ -164,8 +165,16 @@ class Engine(object):
                         self._get_device_by_id(device_id), device_id, action, params, self._extra)))
             for process in processes:
                 process.start()
+
+            # for process in processes:
+            #     process.join()
             for process in processes:
-                process.join()
+                process.join(WORKER_TIMEOUT)  
+                if process.is_alive():
+                    logger.warning(f"Process {process.pid} is taking too long and will be terminated.")
+                    process.terminate()
+                    process.join() 
+
         except Exception as err:
             logger.info(err)
             raise

@@ -154,6 +154,7 @@ class Service(object):
 
         if os.name == 'posix':
             path_splitted = LOGS_PATH.split("/")
+            path_splitted[0]= '/'
         else:
             path_splitted = LOGS_PATH.split("\\")
             path_splitted.insert(1, "\\")
@@ -164,19 +165,12 @@ class Service(object):
             logger.error(f"The logs folder '{folder}' doesn't exist")
             return []
 
-        log_files = [file for file in os.listdir(
-            folder) if file.endswith(".log")]
-        if not log_files:
-            logger.info(f"The logs files '{folder}' don't exist")
-            return []
-
         contents = []
         try:
-            for file in log_files:
-                file_path = os.path.join(folder, file)
-                with open(file_path, 'r') as f:
-                    content = f.read()
-                    contents.append(content)
+            file_path = os.path.join(folder, path_splitted[-1])
+            with open(file_path, 'r') as f:
+                content = f.read()
+                contents.append(content)
         except Exception as err:
             logger.error(f"can't extract data from log files")
             return []
