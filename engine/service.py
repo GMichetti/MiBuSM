@@ -33,7 +33,7 @@ DEV_INFO_COLLECTION = config_loader.config["internal_db_devs_info"]
 DEV_LIST_COLLECTION = config_loader.config["internal_db_devs_list"]
 ACTION_STATUS_LIST_COLLECTION = config_loader.config["internal_db_action_status_list"]
 MSG_BKR_STATS = config_loader.config["internal_db_msg_bkr_stats"]
-LOGS_PATH = config_loader.config["log_path"]
+LOGS_PATH = config_loader.config["log_file_path"]
 
 
 class Service(object):

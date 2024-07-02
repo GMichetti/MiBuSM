@@ -41,10 +41,10 @@ class ConfigModel(BaseModel):
     internal_db_devs_list: str = "mibu_devs_list"
     internal_db_action_status_list: str = "mibu_action_status_list"
     internal_db_msg_bkr_stats: str = "mibu_msg_bkr_stats"
-    action_status_sb_pruning_time: PositiveInt = 60  # [minutes]
-    log_path: str = os.path.join("/var", "log","mibu.log") if os.name == 'posix' else os.path.join("C:\\", "var", "log", "mibu.log")
-    log_lock_file: str = os.path.join("/var", "log","mibu.lock") if os.name == 'posix' else os.path.join("C:\\", "var", "log","mibu.lock")
-    max_bytes: PositiveInt = 128 * 128
+    action_status_sb_pruning_time: PositiveInt = 60     # [minutes]
+    log_file_path: str = os.path.join("/var", "log","mibu", "mibu.log") if os.name == 'posix' else os.path.join("C:\\", "var", "log", "mibu","mibu.log")
+    log_lock_file: str = os.path.join("/var", "log", "mibu", "mibu.lock") if os.name == 'posix' else os.path.join("C:\\", "var", "log","mibu","mibu.lock")
+    log_max_bytes: PositiveInt = 1024 * 512             # [Kbytes]
     max_workers: PositiveInt = 4
     polling_cycle_heartbeat: PositiveInt = 5
     waiting_time: PositiveInt = 5
@@ -55,8 +55,9 @@ class ConfigModel(BaseModel):
     auto_max_time_delta: PositiveInt = 70
     action_retry_delay: PositiveInt = 1
     action_retry_tries: PositiveInt = 2
+    worker_timeout: PositiveInt = 30
     default_user_password: str = "Ch@ngeMe!"
-    worker_timeout = PositiveInt = 30
+
 
     @validator("auto_max_time_delta", pre=True, always=True, check_fields=True)
     def validate_max_time_delta(cls, value, values):

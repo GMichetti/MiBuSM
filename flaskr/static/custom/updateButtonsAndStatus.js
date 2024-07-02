@@ -44,7 +44,7 @@ function updateStatus(data) {
         switch (res) {
             case 2:
                 devStatus.style.color = "green";
-                devStatus.textContent = "READY";
+                devStatus.textContent = "IN SYNC";
                 if (devHomeBtn) {
                     devHomeBtn.enabled = true;
                 }
@@ -55,7 +55,7 @@ function updateStatus(data) {
 
             case 1:
                 devStatus.style.color = "yellow";
-                devStatus.textContent = "OFF-SYNC";
+                devStatus.textContent = "OUT OF SYNC";
                 if (devHomeBtn) {
                     devHomeBtn.disabled = true;
                 }

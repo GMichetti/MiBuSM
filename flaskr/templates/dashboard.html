@@ -92,16 +92,16 @@
         <!-- MAIN BLOCK -->
         {% for reg_dev in reg_devs %}
         <div class="container-fluid pt-4 px-4 border border-light rounded border-2">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">{{ reg_dev.dev_type | uppercase}} - {{ reg_dev.name }}</h6>
+                <h5 id="{{ ['status', reg_dev.id]|join }}"> ? </h5>
+            </div>
             <div class="row g-4">
                 <div class="col-sm-12 col-xl-6">
                     <div class="bg-secondary text-center rounded p-4">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h6 class="mb-0">{{ reg_dev.dev_type | uppercase}} - {{ reg_dev.name }}</h6>
-                            <h5 id="{{ ['status', reg_dev.id]|join }}"> ? </h5>
-                        </div>
                         <canvas id="{{ ['histogram', reg_dev.id]|join }}"></canvas>
                     </div>
-                    <div class="d-grid gap-2 d-md-block mt-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
                         {% if (reg_dev.ip != "_") and (reg_dev.h_ip == "_") %}
                         <button id="{{ ['home-btn', reg_dev.id]|join }}" onclick="window.open('https://{{reg_dev.ip}}')" type="button" class="btn btn-outline-info m-2"><i class="fa fa-home me-2"></i> Home </button>
                         {% endif %}

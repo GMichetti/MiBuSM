@@ -16,8 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import logging
-import inspect
+import os
+import fcntl
+import datetime
+import zipfile
 
 try:
     from config_loader import Config_Loader
@@ -28,100 +30,76 @@ try:
     import fcntl
 except ImportError:
     import msvcrt
-    
-class SizeLimitedFileHandler(logging.FileHandler):
-    def __init__(self, filename, mode='a', maxBytes=0, encoding=None, delay=0):
-        self.maxBytes = maxBytes
-        self.current_size = os.path.getsize(filename) if os.path.exists(filename) else 0
-        super().__init__(filename, mode, encoding, delay)
 
-    def shouldRollover(self, record):
-        if self.maxBytes > 0:
-            self.current_size += len(self.format(record))  # Calculate current log record size
-            return self.current_size > self.maxBytes
-        return False
 
-    def doRollover(self):
-        if self.stream:
-            self.stream.close()
-            self.stream = None
-        self.current_size = 0
-        super().doRollover()
+config_loader = Config_Loader()
+
+LOCK_FILE = config_loader.config["log_lock_file"]
+LOG_FILE = config_loader.config["log_file_path"]
+LOG_MAX_SIZE = config_loader.config["log_max_bytes"]
+
 
 class Logger:
-    _instance = None
-    _file_lock = None
+    def __init__(self):
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(Logger, cls).__new__(cls)
-            cl = Config_Loader()
-            cls._instance.setup_logger(cl.config)
-            cls._file_lock = FileLock(cl.config["log_lock_file"])
-        return cls._instance
-    
-    def _get_caller(self):
-        """Needed to get the caller name"""
-        
-        stack = inspect.stack()
-        caller = stack[2]
-        return caller.filename
+        self.filename = LOG_FILE
+        self.max_size = LOG_MAX_SIZE
+        self.lock = FileLock(LOCK_FILE)
 
-    def setup_logger(self, config):
+
+    def _archive_log(self):
         """
-        Logger setup
+        It archives old log files
+        """
 
-        Args:
-            config (dict): used to get the configuration data
-        """    
+        timestamp = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+        zip_filename = f"{timestamp}_mibu_log.zip"
+        zip_filepath = os.path.join(os.path.dirname(self.filename), zip_filename)
         
-        self.logger = logging.getLogger("MiBu")
-        self.logger.setLevel(logging.DEBUG)
-        log_path = config["log_path"]
-        max_log_size = config["max_bytes"]
-        file_handler = SizeLimitedFileHandler(filename=log_path, maxBytes=max_log_size)
-        file_handler.setLevel(logging.DEBUG)
+        if not os.path.exists(zip_filepath):
+            with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED, allowZip64=True):
+                pass
+        
+        with zipfile.ZipFile(zip_filepath, 'a', zipfile.ZIP_DEFLATED, allowZip64=True) as zipf:
+            zipf.write(self.filename, os.path.basename(self.filename))
+        
 
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.INFO)
+        with open(self.filename, 'w'):
+            pass
+        
+        self.current_size = 0
 
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        file_handler.setFormatter(formatter)
-        console_handler.setFormatter(formatter)
+    def _log(self, level, message):
+        """
+        Internal log method to write on the log file
+        """
 
-        self.logger.addHandler(file_handler)
-        self.logger.addHandler(console_handler)
+        if self.lock.acquire():
+            try:
+                timestamp = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+                msg = f"{timestamp} - {level} - {message}\n"
+                msg_len = len(msg)
+
+                self.current_size = os.path.getsize(self.filename) if os.path.exists(self.filename) else 0
+                if self.current_size + msg_len > LOG_MAX_SIZE:
+                    self._archive_log()
+
+                with open(self.filename, 'a') as f:
+                    f.write(msg)
+                self.current_size += msg_len
+
+            finally:
+                self.lock.release()
 
     def info(self, message):
-        """It writes an info level message"""
-        
-        if self._file_lock.acquire():
-            try:
-                logger = self.logger
-                logger.info(self._get_caller() + " : " + str(message))
-            finally:
-                self._file_lock.release()
-                
+        self._log('INFO', message)
+
     def warning(self, message):
-        """It writes a warning level message"""
-        
-        if self._file_lock.acquire():
-            try:
-                logger = self.logger
-                logger.warning(self._get_caller() + " : " + str(message))
-            finally:
-                self._file_lock.release()
+        self._log('WARNING', message)
 
     def error(self, message):
-        """It writes an error level message"""
-        
-        if self._file_lock.acquire():
-            try:
-                logger = self.logger
-                logger.error(self._get_caller() + " : " + str(message))
-            finally:
-                self._file_lock.release()
+        self._log('ERROR', message)
+
 
 class FileLock:
     """
@@ -133,30 +111,43 @@ class FileLock:
         self.filename = filename
         self.handle = None
 
+    def __enter__(self):
+        self.acquire()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.release()
+
     def acquire(self):
         """
-        acquisition of the lock file. This way no other process can write to the log file
+        Acquisition of the lock file. This way no other process can write to the log file
         """
-        
+
         self.handle = open(self.filename, 'w')
         try:
             if os.name == 'posix':
-                fcntl.flock(self.handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                fcntl.flock(self.handle, fcntl.LOCK_EX)
             elif os.name == 'nt':
                 msvcrt.locking(self.handle.fileno(), msvcrt.LK_LOCK, 1)
-        except IOError:
+        except (IOError,ValueError):
+            return False
+        except Exception as err:
             return False
         return True
 
     def release(self):
         """
-        stopping the acquisition of the lock file. This way othjer process can lock the resource
+        Releasing the lock file. This way other processes can lock the resource
         """
-        
-        if self.handle:
-            if os.name == 'posix':
-                fcntl.flock(self.handle, fcntl.LOCK_UN)
-            elif os.name == 'nt':
-                msvcrt.locking(self.handle.fileno(), msvcrt.LK_UNLCK, 1)
-            self.handle.close()
 
+        try:
+            if self.handle:
+                if os.name == 'posix':
+                    fcntl.flock(self.handle, fcntl.LOCK_UN)
+                elif os.name == 'nt':
+                    msvcrt.locking(self.handle.fileno(), msvcrt.LK_UNLCK, 1)
+                self.handle.close()
+        except (IOError,ValueError):
+            return False
+        except Exception as err:
+            return False
+        return True

@@ -59,7 +59,7 @@
 
 4. Configure MongoDB and Redis as per your setup requirements.
 
-5. check that log and lock files are created when necessary (see `config_loader.py` for default values) and/or have the correct permissions associated
+5. Create the folder (and set up the correct permissions) to put the logs in (look at `config_loader.py` for default)
 
 6. Launch the necessary engine scripts:
 
@@ -83,6 +83,20 @@
     ```bash
     flask --app flaskr.server run --host=0.0.0.0
     ```
+
+8. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
+    (*windows*)
+    ```bash
+    del /Q "C:\var\log\mibu\*.zip"
+    ```
+    add the batch script in the scheduler (taskschd.msc)
+
+    (*linux*)
+    ```bash
+    sudo crontab -e
+    0 */72 * * * find /var/log/mibu -type f -name "*.zip" -delete
+    ```
+
 
 ### Configuration
 
@@ -133,7 +147,7 @@ Include screenshots here to showcase the interface and features.
 
 ## Version
 
-**[1.0.1] - 06-23-2024**
+**[1.0.3] - 07-01-2024**
 
 
 ## Contributing
