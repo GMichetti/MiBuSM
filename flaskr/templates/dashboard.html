@@ -93,8 +93,8 @@
         {% for reg_dev in reg_devs %}
         <div class="container-fluid pt-4 px-4 border border-light rounded border-2">
             <div class="d-flex align-items-center justify-content-between mb-4">
-                <h6 class="mb-0">{{ reg_dev.dev_type | uppercase}} - {{ reg_dev.name }}</h6>
-                <h5 id="{{ ['status', reg_dev.id]|join }}"> ? </h5>
+                <h5 class="mb-0">{{ reg_dev.dev_type | uppercase}} - {{ reg_dev.name }}</h5>
+                <h6 id="{{ ['status', reg_dev.id]|join }}"> ? </h6>
             </div>
             <div class="row g-4">
                 <div class="col-sm-12 col-xl-6">
@@ -116,7 +116,7 @@
 
                 <div class="col-sm-12 col-xl-6">
                     <div class="bg-secondary rounded h-60 p-4" id="lastdata">
-                        <h6 class="mb-0">Last Detailed Data:</h6><br />
+                        <h6 class="mb-0">Last Data Details:</h6><br />
                         <div id="{{ ['show-json', reg_dev.id]|join }}"></div>
                     </div>
                 

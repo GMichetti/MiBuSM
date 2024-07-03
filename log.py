@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import os
 import fcntl
 import datetime
 import zipfile
@@ -92,12 +91,21 @@ class Logger:
                 self.lock.release()
 
     def info(self, message):
+        """
+        Logging with INFO level
+        """
         self._log('INFO', message)
 
     def warning(self, message):
+        """
+        Logging with WARNING level
+        """
         self._log('WARNING', message)
 
     def error(self, message):
+        """
+        Logging with ERROR level
+        """
         self._log('ERROR', message)
 
 
