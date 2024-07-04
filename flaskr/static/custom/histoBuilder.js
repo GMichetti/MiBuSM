@@ -34,7 +34,7 @@ function buildHisto(dev) {
             dev["get_info"].forEach((el) => {
                 (el["result"]["result"].hasOwnProperty("load")) ? dataLoad.push(el["result"]["result"]["load"]) : dataLoad.push(0);
                 (el["result"]["result"].hasOwnProperty("vin")) ? dataVin.push(el["result"]["result"]["vin"]) : dataVin.push(0);
-                (el["result"]["result"].hasOwnProperty("vout")) ? dataVout.push(el["result"]["result"]["vout"]) : dataVin.push(0);
+                (el["result"]["result"].hasOwnProperty("vout")) ? dataVout.push(el["result"]["result"]["vout"]) : dataVout.push(0);
                 (el["result"]["result"].hasOwnProperty("battery")) ? dataBattery.push(el["result"]["result"]["battery"]) : dataBattery.push(0);
                 resTimestamp.push((new Date(el["res_timestamp"] * 1000)).toLocaleString());
             });
