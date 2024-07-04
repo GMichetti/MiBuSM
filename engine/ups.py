@@ -63,6 +63,8 @@ class CyberPowerUPS(UPS, USB_Reachable):
             if not self._device:
                 device_item = hid.enumerate(
                     self._vendor_id, self._product_id).pop()
+                if isinstance(device_item, list):
+                    device_item = device_item[0]
                 logger.info(
                     f"trying to login Cyberpower UPS with PID: {self._product_id}")
                 self._device = hid.device()
@@ -82,9 +84,6 @@ class CyberPowerUPS(UPS, USB_Reachable):
     def get_info(self):
         """
         It gets info from Cyberpower UPS
-
-        Args:
-            radius (float): Il raggio del cerchio.
 
         Returns:
             dict: status of the UPS

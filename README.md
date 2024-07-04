@@ -114,6 +114,26 @@ The default credentials are:
 - password: "Ch@ngeMe!"
 
 
+**Note for Linux Users**
+
+If you don't have sufficient permissions to access the USB UPS device, follow these steps:
+
+1. Create a one-line file in `/etc/modules-load.d/00-my-usbhid.conf` with the following content:
+
+```
+usbhid
+```
+
+It should not be necessary to do this on modern systems because modules are automatically loaded, but sometimes it is still necessary to force loading of a module.
+
+2. If all else fails, try adding the following kernel boot parameter:
+
+```
+usbhid.quirks=0x0463:0xffff:0x08
+
+```
+
+
 ## Extending Mibu
 
 Mibu is designed to be easily extensible. To add support for new devices, you need to:
@@ -147,7 +167,7 @@ Include screenshots here to showcase the interface and features.
 
 ## Version
 
-**[1.0.3] - 07-01-2024**
+**[1.0.4] - 07-04-2024**
 
 
 ## Contributing
