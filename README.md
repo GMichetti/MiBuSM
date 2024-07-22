@@ -118,7 +118,17 @@ The default credentials are:
 
 If you don't have sufficient permissions to access the USB UPS device, follow these steps:
 
-1. Create a one-line file in `/etc/modules-load.d/00-my-usbhid.conf` with the following content:
+1. create a cp.rules file in the folder `etc/udev.rules.d` like this:
+
+```
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0764", ATTRS{idProduct}=="0601", GROUP="users", MODE="0666" 
+```
+
+and replace the values ​​idVendor and idProduct you can find via the command `lsusb` command
+
+If if it still doesn't work:
+
+2. Create a one-line file in `/etc/modules-load.d/00-my-usbhid.conf` with the following content:
 
 ```
 usbhid
@@ -126,7 +136,7 @@ usbhid
 
 It should not be necessary to do this on modern systems because modules are automatically loaded, but sometimes it is still necessary to force loading of a module.
 
-2. If all else fails, try adding the following kernel boot parameter:
+3. If all else fails, try adding the following kernel boot parameter:
 
 ```
 usbhid.quirks=0x0463:0xffff:0x08
