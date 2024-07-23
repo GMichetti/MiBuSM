@@ -124,7 +124,7 @@ If you don't have sufficient permissions to access the USB UPS device, follow th
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="0764", ATTRS{idProduct}=="0601", GROUP="users", MODE="0666" 
 ```
 
-and replace the values ​​idVendor and idProduct you can find via the command `lsusb` command
+and replace the values ​​'idVendor' and 'idProduct' you can get via the `lsusb` command
 
 If if it still doesn't work:
 
