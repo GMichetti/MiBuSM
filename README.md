@@ -75,7 +75,7 @@
     ```
 
 7. Run the Flask server from the main folder
- (*NOTE*: it's advisable not to use the internal Flask HTTP server/internal WSGI in production env (use instead, for example, the gunicorn/nginx combination):
+ ( *NOTE*: it's recommended *NOT* to use the internal Flask HTTP server/internal WSGI in production environment (use instead, for example, the gunicorn/nginx combination ):
 
 
     ```bash
