@@ -74,7 +74,9 @@
     engine\python auto_feeder.py
     ```
 
-7. Run the Flask server from the main folder:
+7. Run the Flask server from the main folder
+ (*NOTE*: it's advisable not to use the internal Flask HTTP server/internal WSGI in production env (use instead, for example, the gunicorn/nginx combination):
+
 
     ```bash
     flask --app flaskr.server run
@@ -84,7 +86,7 @@
     flask --app flaskr.server run --host=0.0.0.0
     ```
 
-8. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
+9. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
     (*windows*)
     ```bash
     del /Q "C:\var\log\mibu\*.zip"
@@ -153,8 +155,6 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 2. Implement the necessary communication protocols and monitoring features for the new device.
 
 ## Screenshots
-
-Include screenshots here to showcase the interface and features.
 
 ![Dashboard](screenshots/dashboard.jpg)
 *Screenshot of the Mibu dashboard.*
