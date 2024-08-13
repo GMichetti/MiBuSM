@@ -107,6 +107,7 @@ To get started on Linux or Windows without Docker, follow these steps:
 
 2. Run the Flask server from the main folder:
 
+
     ```bash
     flask --app flaskr.server run
     ```
@@ -116,6 +117,7 @@ To get started on Linux or Windows without Docker, follow these steps:
     ```
 
 3. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
+
     (*windows*)
     ```bash
     del /Q "C:\var\log\mibu\*.zip"
@@ -138,7 +140,7 @@ If you don't have sufficient permissions to access the USB UPS device, follow th
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="0764", ATTRS{idProduct}=="0601", GROUP="users", MODE="0666" 
 ```
 
-and replace the values ​​idVendor and idProduct you can find via the command `lsusb` command
+and replace the values ​​'idVendor' and 'idProduct' you can get via the `lsusb` command
 
 If if it still doesn't work:
 
@@ -175,8 +177,6 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 2. Implement the necessary communication protocols and monitoring features for the new device.
 
 ## Screenshots
-
-Include screenshots here to showcase the interface and features.
 
 ![Dashboard](screenshots/dashboard.jpg)
 *Screenshot of the Mibu dashboard.*
