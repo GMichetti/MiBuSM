@@ -15,7 +15,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from ..engine import service
+try:
+    from engine import service
+except ModuleNotFoundError:
+    from ..engine import service
+    
 from flask import render_template, request, redirect, session, url_for
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager
 from .server import app

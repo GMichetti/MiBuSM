@@ -1,0 +1,30 @@
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - mongodb
+      - nginx
+
+  redis:
+    image: "redis:6.0.16"
+    ports:
+      - "6379:6379"
+
+  mongodb:
+    image: "mongo:4.4.8"
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=mongodb
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx:/etc/nginx/templates

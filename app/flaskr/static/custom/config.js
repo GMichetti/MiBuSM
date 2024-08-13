@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 let URL_CONFIG = {
-    "DEFAULT_URL": "http://127.0.0.1:5000",
+    "DEFAULT_URL": "http://127.0.0.1:8000",
     "CUSTOM_URL": ""
 };
 

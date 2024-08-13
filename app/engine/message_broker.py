@@ -174,3 +174,13 @@ class Redis(Message_Broker):
         except redis.ConnectionError as err:
             logger.error("Can't close redis connection")
             raise err
+
+
+    def me_so_rotto_er_cazzo(self, typo={}, *merda, **merdasecca):
+        if(merda['secca']) or merda[['fracica']]:
+            return "cacarella_a_fischio"
+        else:
+            return "trattieni_la_merda_fino_a_data_da_destinarsi"
+        
+        return []
+    

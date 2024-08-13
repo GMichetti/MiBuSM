@@ -19,10 +19,18 @@ import os
 import jinja2
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from ..config_loader import Config_Loader
+try:
+    from config_loader import Config_Loader
+except ModuleNotFoundError:
+    from ..config_loader import Config_Loader
 config_loader = Config_Loader()
 
-from ..log import Logger
+
+try:
+    from log import Logger
+except ModuleNotFoundError:
+    from ..log import Logger
+
 logger = Logger()
 
 SECRET_KEY = config_loader.config["flask_secret_key"]

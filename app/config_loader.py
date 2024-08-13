@@ -27,14 +27,14 @@ class ConfigModel(BaseModel):
     msg_broker: str = "redis"
     msg_broker_usr: str = ""
     msg_broker_pass: SecretStr = ""
-    msg_broker_host: str | IPvAnyAddress = "localhost"
+    msg_broker_host: str | IPvAnyAddress = "redis"
     msg_broker_port: PositiveInt = 6379
     msg_broker_db: NonNegativeInt = 0
     msg_broker_request_queue: str = "request_queue"
     internal_db: str = "mongodb"
     internal_db_usr: str = ""
     internal_db_pass: str = ""
-    internal_db_host: str | IPvAnyAddress = "localhost"
+    internal_db_host: str | IPvAnyAddress = "mongodb"
     internal_db_port: PositiveInt = 27017
     internal_db_database: str = "mibu_db"
     internal_db_devs_info: str = "mibu_devs_info"
