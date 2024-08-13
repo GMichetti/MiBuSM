@@ -21,7 +21,29 @@
   - **Pub/Sub**: General software architecture.
   - **SOLID Principles**: The software design adheres to SOLID principles.
 
-## Getting Started
+## Getting Started via Docker
+
+
+The easiest way to get started with MiBuSM is by using Docker. 
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/gmichetti/mibusm.git
+    ```
+
+2. Simply run the following command:
+    ```bash
+    docker-compose up --build -d
+    ```
+
+    This command will build the Docker image and start the containers in detached mode.
+
+
+
+## Getting Started for Linux/Windows
+
+To get started on Linux or Windows without Docker, follow these steps:
 
 ### Prerequisites
 
@@ -35,7 +57,6 @@
 
     ```bash
     git clone https://github.com/gmichetti/mibusm.git
-    cd mibu
     ```
 
 2. Create a virtual environment and activate it:
@@ -59,9 +80,19 @@
 
 4. Configure MongoDB and Redis as per your setup requirements.
 
-5. Create the folder (and set up the correct permissions) to put the logs in (look at `config_loader.py` for default)
+5. Create the folder (and set up the correct permissions) to put the logs in (look at following paragraph)
 
-6. Launch the necessary engine scripts:
+
+### Configuration
+
+1. Modify the `config.yaml` file to set up the engine configurations. If no file config file is provided, will be used the default values (look at `config_loader.py`)
+
+2. Modify the `config.js` file to set up the Flask server configuration. If no config is provided, will be used the default values
+
+
+### Run the Application
+
+1. Launch the necessary engine scripts:
 
     (*windows*)
     ```bash
@@ -74,8 +105,7 @@
     engine\python auto_feeder.py
     ```
 
-7. Run the Flask server from the main folder
- ( *NOTE*: it's recommended *NOT* to use the internal Flask HTTP server/internal WSGI in production environment (use instead, for example, the gunicorn/nginx combination ):
+2. Run the Flask server from the main folder:
 
 
     ```bash
@@ -86,7 +116,8 @@
     flask --app flaskr.server run --host=0.0.0.0
     ```
 
-9. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
+3. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
+
     (*windows*)
     ```bash
     del /Q "C:\var\log\mibu\*.zip"
@@ -98,23 +129,6 @@
     sudo crontab -e
     0 */72 * * * find /var/log/mibu -type f -name "*.zip" -delete
     ```
-
-
-### Configuration
-
-1. Modify the `config.yaml` file to set up the engine configurations. If no file config file is provided, will be used the default values (look at `config_loader.py`)
-
-2. Modify the `config.js` file to set up the Flask server configuration. If no config is provided, will be used the default values
-
-
-## Usage
-
-Once the application is running, you can access the web interface through your browser at `http://localhost:5000` (or the address where the server is running). The interface provides various functionalities to monitor and control your network devices.
-The default credentials are: 
-
-- user: "JackBurton"
-- password: "Ch@ngeMe!"
-
 
 **Note for Linux Users**
 
@@ -144,6 +158,14 @@ It should not be necessary to do this on modern systems because modules are auto
 usbhid.quirks=0x0463:0xffff:0x08
 
 ```
+
+## Usage
+
+Once the application is running, you can access the web interface through your browser at `http://localhost:8000` (or the address where the server is running). The interface provides various functionalities to monitor and control your network devices.
+The default credentials are: 
+
+- user: "JackBurton"
+- password: "Ch@ngeMe!"
 
 
 ## Extending Mibu
@@ -177,7 +199,7 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 
 ## Version
 
-**[1.0.4] - 07-04-2024**
+**[1.0.5] - 08-12-2024**
 
 
 ## Contributing
