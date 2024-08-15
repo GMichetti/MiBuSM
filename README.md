@@ -121,7 +121,7 @@ To get started on Linux or Windows without Docker, follow these steps:
     flask --app flaskr.server run --host=0.0.0.0
     ```
 
-    (It is recommended *not* to use the internal Flask server but to use for example, nginx/gunicorn combimation)
+    (It is recommended *not* to use the internal Flask server but to use for example, nginx/gunicorn combination)
 
 3. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
 
