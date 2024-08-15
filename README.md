@@ -175,7 +175,7 @@ The default credentials are:
 - password: "Ch@ngeMe!"
 
 
-The rest APIs exposed by the server are documented via the related Swagger within the GUI itself
+The REST APIs exposed by the server are documented via the related Swagger within the GUI itself
 
 
 ## Extending Mibu
