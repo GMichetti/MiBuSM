@@ -175,6 +175,9 @@ The default credentials are:
 - password: "Ch@ngeMe!"
 
 
+The rest APIs exposed by the server are documented via the related Swagger within the GUI itself
+
+
 ## Extending Mibu
 
 Mibu is designed to be easily extensible. To add support for new devices, you need to:
