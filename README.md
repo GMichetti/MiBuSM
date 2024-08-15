@@ -23,6 +23,12 @@
 
 ## Getting Started via Docker
 
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Installation and Running 
 
 The easiest way to get started with MiBuSM is by using Docker. 
 
@@ -32,7 +38,7 @@ The easiest way to get started with MiBuSM is by using Docker.
     git clone https://github.com/gmichetti/mibusm.git
     ```
 
-2. Simply run the following command:
+2. Run the following command:
     ```bash
     docker-compose up --build -d
     ```
@@ -47,9 +53,9 @@ To get started on Linux or Windows without Docker, follow these steps:
 
 ### Prerequisites
 
-- Python 3.x
-- MongoDB
-- Redis
+- Python >= 3.8.0
+- MongoDB >= 4.4.8
+- Redis >= 6.0.16
 
 ### Installation
 
@@ -107,7 +113,6 @@ To get started on Linux or Windows without Docker, follow these steps:
 
 2. Run the Flask server from the main folder:
 
-
     ```bash
     flask --app flaskr.server run
     ```
@@ -115,6 +120,8 @@ To get started on Linux or Windows without Docker, follow these steps:
     ```bash
     flask --app flaskr.server run --host=0.0.0.0
     ```
+
+    (It is recommended *not* to use the internal Flask server but to use for example, nginx/gunicorn combimation)
 
 3. It is recommended to create a scheduler/crontab to remove the zip files containing the old archived logs. For example:
 
