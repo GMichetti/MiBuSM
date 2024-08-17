@@ -20,8 +20,11 @@
   - **MVC**: Implemented in the web server with `controller.py` and `models.py` inside the `flaskr` folder, and HTML files inside `flaskr/templates`.
   - **Pub/Sub**: General software architecture.
   - **SOLID Principles**: The software design adheres to SOLID principles.
+  
 
 ## Getting Started via Docker
+
+The easiest way to get started with MiBuSM is by using Docker. 
 
 ### Prerequisites
 
@@ -29,8 +32,6 @@
 - Docker Compose
 
 ### Installation and Running 
-
-The easiest way to get started with MiBuSM is by using Docker. 
 
 1. Clone the repository:
 

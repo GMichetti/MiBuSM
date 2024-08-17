@@ -1,6 +1,6 @@
 __pycache__
 __pycache__*.*
-engine\mibu.log
-flaskr\database\*.*
+app\engine\mibu.log
+app\flaskr\database\*.*
 venv
 *.log
