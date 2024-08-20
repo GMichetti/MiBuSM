@@ -169,7 +169,7 @@ usbhid.quirks=0x0463:0xffff:0x08
 
 ## Usage
 
-Once the application is running, you can access the web interface through your browser at `http://localhost:8000` (or the address where the server is running). The interface provides various functionalities to monitor and control your network devices.
+Once the application is running, you can access the web interface through your browser at `http://localhost:80/login` (or the address where the server is running). The interface provides various functionalities to monitor and control your network devices.
 The default credentials are: 
 
 - user: "JackBurton"
@@ -210,7 +210,7 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 
 ## Version
 
-**[1.0.5] - 08-12-2024**
+**[1.0.6] - 08-20-2024**
 
 
 ## Contributing

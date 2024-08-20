@@ -27,4 +27,4 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx:/etc/nginx/templates
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf

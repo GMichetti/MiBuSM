@@ -62,7 +62,7 @@ def load_user(user):
 @app.route('/')
 @login_required
 def index():
-    app.logger.info('Accesso alla route /')
+    app.logger.info('Access to route /')
     return render_template('dashboard.html', current_user=current_user)
 
 
