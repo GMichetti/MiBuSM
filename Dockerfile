@@ -43,4 +43,5 @@ WORKDIR /app
 # Start supervisor and cron in the foreground
 CMD ["sh", "-c", "cron && /usr/bin/supervisord -c /etc/supervisor/supervisord.conf"]
 
+# Expose port 8000 internally to Docker
 EXPOSE 8000
