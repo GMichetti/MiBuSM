@@ -10,13 +10,9 @@ services:
 
   redis:
     image: "redis:6.0.16"
-    ports:
-      - "6379:6379"
 
   mongodb:
     image: "mongo:4.4.8"
-    ports:
-      - "27017:27017"
     environment:
       - MONGO_INITDB_DATABASE=mongodb
 

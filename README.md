@@ -1,6 +1,6 @@
 # Mibu SM
 
-**Mibu** is a network device control and monitoring software designed to provide a comprehensive overview of your network infrastructure. The software is designed to be easily extensible to support additional devices.
+**Mibu** The idea behind MiBu is to have a single pane of glass through which to interact with network devices typically found in a personal lab or in a small office (Server, Firewall, UPS, etc.) From the GUI, you can get metrics and perform basic actions. Via REST API it's possible to obtain more advanced actions (where applicable).
 
 
 ## Features
@@ -20,6 +20,12 @@
   - **MVC**: Implemented in the web server with `controller.py` and `models.py` inside the `flaskr` folder, and HTML files inside `flaskr/templates`.
   - **Pub/Sub**: General software architecture.
   - **SOLID Principles**: The software design adheres to SOLID principles.
+
+
+## How it works
+
+![Component/Flow Diagram](screenshots/mibu-arch.jpg) 
+*Mibu Component/Flow Diagram.*
   
 
 ## Getting Started via Docker
@@ -210,7 +216,7 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 
 ## Version
 
-**[1.0.6] - 08-20-2024**
+**[1.0.7] - 08-20-2024**
 
 
 ## Contributing
