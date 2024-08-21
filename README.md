@@ -1,6 +1,6 @@
 # Mibu SM
 
-**Mibu** The idea behind MiBu is to have a single pane of glass through which to interact with network devices typically found in a personal lab or in a small office (Server, Firewall, UPS, etc.) From the GUI, you can get metrics and perform basic actions. Via REST API it's possible to obtain more advanced actions (where applicable).
+The idea behind MiBu is to have a single pane of glass through which to interact with network devices typically found in a personal lab or in a small office (Server, Firewall, UPS, etc.) From the GUI, you can get metrics and perform basic actions. Via REST API it's possible to obtain more advanced actions (where applicable).
 
 
 ## Features
@@ -24,7 +24,8 @@
 
 ## How it works
 
-![Component/Flow Diagram](screenshots/mibu-arch.jpg) 
+![Component/Flow Diagram](img/mibu-arch.jpg)
+
 *Mibu Component/Flow Diagram.*
   
 
@@ -195,22 +196,22 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 
 ## Screenshots
 
-![Dashboard](screenshots/dashboard.jpg)
+![Dashboard](img/dashboard.jpg)
 *Screenshot of the Mibu dashboard.*
 
-![Devices monitored](screenshots/devices.jpg)
+![Devices monitored](img/devices.jpg)
 *Screenshot of the device monitored.*
 
-![Users](screenshots/users.jpg)
+![Users](img/users.jpg)
 *Screenshot of the users registered.*
 
-![Performance](screenshots/perflogs.jpg)
+![Performance](img/perflogs.jpg)
 *Screenshot of the performance page.*
 
-![Logs 2](screenshots/perflogs2.jpg)
+![Logs 2](img/perflogs2.jpg)
 *Screenshot of the logs page.*
 
-![Docs](screenshots/swagger.jpg)
+![Docs](img/swagger.jpg)
 *Screenshot API rest swagger page*
 
 
