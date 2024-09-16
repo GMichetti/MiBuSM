@@ -1,0 +1,75 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Start Containers
+      run: |
+        docker compose -f "docker-compose.yml" up -d --build
+      
+    - name: Stop Containers
+      if: always()
+      run: docker compose -f "docker-compose.yml" down
+
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build 
+    steps:         
+
+      - name: Deploy to Remote Server via SSH
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }} 
+          username: ${{ secrets.REMOTE_USER }} 
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}  
+          port: ${{secrets.PORT}}
+          script: |
+            DST_IP_ADDR="${{ secrets.LOCAL_ADDR }}"
+            if [ ! -d "/home/ubuntu/Server" ]; then
+              git clone git@github.com:GMichetti/MiBuSM.git /home/ubuntu/Server
+            else
+              cd /home/ubuntu/Server
+              git pull origin main
+            fi
+            cd /home/ubuntu/Server
+            git pull origin main  
+            if [ -d "/home/ubuntu/tmp_mibu_db" ]; then
+              cd /home/ubuntu/tmp_mibu_db
+              cp db.sqlite ../Server/app/flaskr/database/
+            fi
+            cd /home/ubuntu/Server
+            sed -i "s|\"CUSTOM_URL\": \"\"|\"CUSTOM_URL\": \"$DST_IP_ADDR\"|" app/flaskr/static/custom/config.js
+            docker compose down   
+            docker compose -f "docker-compose.yml" up -d --build
+          
+      - name: "engine reset"   
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }} 
+          username: ${{ secrets.REMOTE_USER }} 
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}  
+          port: ${{secrets.PORT}}
+          script: |
+            DST_IP_ADDR="${{ secrets.LOCAL_ADDR }}"
+            curl -X POST \
+              -d '{"username":"JackBurton","password":"Ch@ngeMe!"}' \
+              -H "Content-Type: application/json" \
+              -c cookie.txt \
+              $DST_IP_ADDR/api/v1/auth/login
+            curl  -X GET \
+              -b cookie.txt \
+              $DST_IP_ADDR/api/v1/reset_engine 
