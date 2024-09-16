@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     cron \
     udev \
     usbutils \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and activate a virtual environment
@@ -27,11 +28,13 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Adding folder for logs
 RUN mkdir -p /var/log/mibu
 
-# # Create the udev rules file with the provided idVendor and idProduct
-# RUN echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="'MY_ID_VENDOR'", ATTRS{idProduct}=="'MY_ID_PRODUCT'", GROUP="users", MODE="0666"' > /etc/udev/rules.d/cp.rules
+RUN echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="'$MY_UPS_ID_VENDOR=0764'", ATTRS{idProduct}=="'$MY_UPS_ID_PRODUCT'", GROUP="users", MODE="0666"' > /etc/udev/rules.d/cp.rules
 
-# # Create the module load configuration file
-# RUN echo 'usbhi' > /etc/modules-load.d/00-my-usbhid.conf
+# Create the corrisponging folder and file
+RUN mkdir -p /etc/modules-load.d && touch /etc/modules-load.d/00-my-usbhid.conf
+
+# Create the module load configuration file
+RUN echo 'usbhid' > /etc/modules-load.d/00-my-usbhid.conf
 
 # Create the cron job configuration file. This job will run every 72 hours to delete .zip files in /var/log/mibu
 RUN echo "0 */72 * * * find /var/log/mibu -type f -name \"*.zip\" -delete" > /etc/cron.d/mibu-cleanup

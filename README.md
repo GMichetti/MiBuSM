@@ -217,7 +217,7 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 
 ## Version
 
-**[1.0.7] - 08-20-2024**
+**[1.0.8] - 09-15-2024**
 
 
 ## Contributing

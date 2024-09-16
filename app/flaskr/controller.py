@@ -300,6 +300,32 @@ class Auth_Login(Resource):
             return {'logged in': 'User Authorized'}, 200
         else:
             return {'error': 'User Unauthorized'}, 401
+        
+class Reset_Engine(Resource):
+    @rest_api_v1.doc(responses={500: 'internal error'})
+    @login_required
+    def get(self):
+        """
+        Useful to reset engine
+
+        """
+        try:
+            devices = Devices.query.all()
+            devices_list = [device.to_dict() for device in devices]
+            devs = engine_service.get_data_from_device_model(devices_list)
+            if engine_service.reset_engine():
+                if engine_service.register_devices(devs):
+                    logger.info("devices registered successfully")
+                    return {'reset engine': 'started'}, 200
+                else:
+                    logger.error("can't register devices")
+            else:
+                logger.error("can't reset the engine")
+                return {'error': 'reset engine not started'}, 401
+                
+        except Exception as err:
+            logger.error(f"internal error: {err}")
+            return {}, 500
 
 
 class Devices_Info(Resource):
@@ -470,6 +496,7 @@ class Get_Command_Result(Resource):
 
 
 rest_api_v1.add_resource(Auth_Login, '/auth/login')
+rest_api_v1.add_resource(Reset_Engine, '/reset_engine')
 rest_api_v1.add_resource(Devices_Info, '/devices_info')
 rest_api_v1.add_resource(Set_State, '/set_state')
 rest_api_v1.add_resource(Get_Perf_n_Logs, '/get_perf_n_logs')

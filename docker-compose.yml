@@ -3,10 +3,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    privileged: true                                 # to access to my Cyberpower USB UPS
+    devices:
+      - "/dev/bus/usb/001/002:/dev/bus/usb/001/002"  # Here is my Cyberpower UPS USB path (found via lsusb cmd)
+    volumes:
+      - /dev:/dev
     depends_on:
       - redis
       - mongodb
       - nginx
+    environment:
+      - MY_UPS_ID_VENDOR=0764
+      - MY_UPS_ID_PRODUCT=0601
 
   redis:
     image: "redis:6.0.16"
