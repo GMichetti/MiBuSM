@@ -1,0 +1,6 @@
+groups:
+  - name: Mibu recurding rules
+    rules:
+    - record: job:request_latency:avg
+      expr: avg by (job) (rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]))
+

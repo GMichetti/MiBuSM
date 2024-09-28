@@ -48,7 +48,7 @@ The easiest way to get started with MiBuSM is by using Docker.
 
 2. Run the following command:
     ```bash
-    docker-compose up --build -d
+    docker compose up --build -d
     ```
 
     This command will build the Docker image and start the containers in detached mode.
@@ -217,7 +217,7 @@ Mibu is designed to be easily extensible. To add support for new devices, you ne
 
 ## Version
 
-**[1.0.8] - 09-15-2024**
+**[1.1.0beta] - 09-28-2024** 
 
 
 ## Contributing

@@ -19,6 +19,8 @@ import os
 import jinja2
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
+
 try:
     from config_loader import Config_Loader
 except ModuleNotFoundError:
@@ -39,6 +41,9 @@ DEFAULT_USER_PASSWORD = config_loader.config["default_user_password"]
 
 db = SQLAlchemy()
 app = Flask(__name__, instance_relative_config=True)
+
+# Needed for Prometheus
+metrics = GunicornPrometheusMetrics(app)
 
 basedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "database")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, DB_NAME)

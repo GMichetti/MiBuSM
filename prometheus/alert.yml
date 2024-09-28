@@ -1,0 +1,11 @@
+groups:
+  - name: MiBu alert rules
+    rules:
+    - alert: HighErrorRate
+      expr: job:request_errors:rate5m > 0.05
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High request error rate"
+        description: "The request error rate is above 5% for more than 10 minutes."
