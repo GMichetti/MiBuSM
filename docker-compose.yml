@@ -36,7 +36,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:latest
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml
