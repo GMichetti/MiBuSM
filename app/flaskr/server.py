@@ -46,11 +46,11 @@ db = SQLAlchemy()
 app = Flask(__name__, instance_relative_config=True)
 
 # Rate Limiter for API
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    storage_uri=RATE_LIMITER_STORAGE_URI,
-)
+# limiter = Limiter(
+#     get_remote_address,
+#     app=app,
+#     storage_uri=RATE_LIMITER_STORAGE_URI,
+# )
 
 # Needed for Prometheus
 metrics = GunicornPrometheusMetrics(app)
