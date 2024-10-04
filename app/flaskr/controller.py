@@ -25,7 +25,7 @@ from flask_login import login_user, login_required, logout_user, current_user, L
 from .server import app
 from flask_restx import Resource, Api, Namespace, fields
 from .server import db
-from .server import limiter
+# from .server import limiter
 from .server import logger
 from .models import User, Devices
 
@@ -427,9 +427,9 @@ class Get_Perf_n_Logs(Resource):
                     "throughput": throughput,
                     "logs": logs}, 200
 
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Get_Perf_n_Logs API: {rle}")
-            return {}, 429
+        # except RateLimitExceeded as rle:
+        #     logger.error(f"too many request for Get_Perf_n_Logs API: {rle}")
+        #     return {}, 429
         
         except Exception as err:
             logger.error(f"error getting performance and log data: {err}")
@@ -485,9 +485,11 @@ class Send_Command(Resource):
                     {'error': 'command not recognized for the device type'}, 400
             else:
                 {'error': 'missing ids or device not registered'}, 404
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Send_Command API {rle}")
-            return {}, 429
+
+        # except RateLimitExceeded as rle:
+        #     logger.error(f"too many request for Send_Command API {rle}")
+        #     return {}, 429
+        
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
@@ -525,9 +527,11 @@ class Get_Command_Result(Resource):
                 return {"result": result}, 200
             else:
                 {'error': 'no actions found'}, 404
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Get_Command API {rle}")
-            return {}, 429
+
+        # except RateLimitExceeded as rle:
+        #     logger.error(f"too many request for Get_Command API {rle}")
+        #     return {}, 429
+        
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
