@@ -19,8 +19,8 @@ import os
 import jinja2
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-# from flask_limiter import Limiter
-# from flask_limiter.util import get_remote_address
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
 try:
@@ -47,12 +47,11 @@ db = SQLAlchemy()
 app = Flask(__name__, instance_relative_config=True)
 
 # Rate Limiter for API
-# limiter = Limiter(
-#     get_remote_address,
-#     app=app,
-#     storage_uri=RATE_LIMITER_STORAGE_URI,
-#     strategy="fixed-window"
-# )
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri=RATE_LIMITER_STORAGE_URI,
+)
 
 # Needed for Prometheus
 metrics = GunicornPrometheusMetrics(app)
