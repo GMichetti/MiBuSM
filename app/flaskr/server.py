@@ -39,7 +39,8 @@ logger = Logger()
 SECRET_KEY = config_loader.config["flask_secret_key"]
 DB_NAME = config_loader.config["flask_db_name"]
 DEFAULT_USER_PASSWORD = config_loader.config["default_user_password"]
-RATE_LIMITER_STORAGE_URI = config_loader.config["internal_db_host"]
+RATE_LIMITER_STORAGE_HOST = config_loader.config["internal_db_host"]
+RATE_LIMITER_DATABASE = config_loader.config["internal_db_rate_limiter"]
 
 # Linking to SQLAlchemy
 db = SQLAlchemy()
@@ -55,8 +56,8 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # Rate Limiter for API
 limiter = Limiter(
     get_remote_address,
-    app=app
-    # storage_uri=RATE_LIMITER_STORAGE_URI,
+    app=app,
+    storage_uri="".join([RATE_LIMITER_STORAGE_HOST, "/",RATE_LIMITER_DATABASE ])
 )
 
 def hide_password(password):
