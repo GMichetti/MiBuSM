@@ -18,7 +18,7 @@ services:
       - MY_UPS_ID_PRODUCT=0601
       - prometheus_multiproc_dir=/tmp/metrics         # Config for Prometheus multiprocessing
     ports:
-      - "8080:8080"                                   # To expose Prometheus metrics
+      - "8080:8080"                                   # To expose Prometheus metrics only
 
   redis:
     image: "redis:6.0.16"

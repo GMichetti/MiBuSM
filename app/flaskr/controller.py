@@ -302,13 +302,15 @@ class Auth_Login(Resource):
             return {'error': 'User Unauthorized'}, 401
         
 class Reset_Engine(Resource):
+    
     @rest_api_v1.doc(responses={500: 'internal error'})
+    @limiter.limit("24 per day", key_func = lambda : current_user.username)
     @login_required
     def get(self):
         """
         Useful to reset engine
-
         """
+        
         try:
             devices = Devices.query.all()
             devices_list = [device.to_dict() for device in devices]
@@ -322,6 +324,9 @@ class Reset_Engine(Resource):
             else:
                 logger.error("can't reset the engine")
                 return {'error': 'reset engine not started'}, 401
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for reset engine: {rle}")
+            return {}, 429
                 
         except Exception as err:
             logger.error(f"internal error: {err}")
@@ -329,11 +334,11 @@ class Reset_Engine(Resource):
 
 
 class Devices_Info(Resource):
-
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
     @rest_api_v1.doc(responses={500: 'internal error'})
+    @limiter.limit("10/minute", key_func = lambda : current_user.username)
     @login_required
     def get(self):
         """
@@ -349,6 +354,9 @@ class Devices_Info(Resource):
                     return {"error": "no data found"}, 400
             else:
                 return {"error:": "no registered devices"}, 404
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Devices_Info API {rle}")
+            return {}, 429
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
@@ -373,29 +381,36 @@ class Set_State(Resource):
         """
         Set whether to turn on, off or reboot a device)
         """
-        data = request.get_json()
-        action = list(data.keys())[0]
-        if action in ["power_on", "shutdown", "reboot"]:
-            dev_ids = data[action]
 
-            if dev_ids and any(obj['id'] in dev_ids for obj in engine_service.get_registered_devices(only_ids=True)):
-                res = engine_service.send_to_devices(
-                    list(map(lambda id: {"id": id, "action": action}, dev_ids)))
-                if res:
-                    return {f"{action}": dev_ids}, 200
+        try:
+            data = request.get_json()
+            action = list(data.keys())[0]
+            if action in ["power_on", "shutdown", "reboot"]:
+                dev_ids = data[action]
 
+                if dev_ids and any(obj['id'] in dev_ids for obj in engine_service.get_registered_devices(only_ids=True)):
+                    res = engine_service.send_to_devices(
+                        list(map(lambda id: {"id": id, "action": action}, dev_ids)))
+                    if res:
+                        return {f"{action}": dev_ids}, 200
+
+                    else:
+                        {'error': f'something went wrong trying to {action} devices: {dev_ids}'}, 400
                 else:
-                    {'error': f'something went wrong trying to {action} devices: {dev_ids}'}, 400
+                    {'error': 'missing ids or device not registered'}, 404
             else:
-                {'error': 'missing ids or device not registered'}, 404
-        else:
-            return {'error': 'internal error'}, 500
+                return {'error': 'internal error'}, 500
+
+        except Exception as err:
+            logger.error(f"internal error: {err}")
+            return {}, 500
 
 
 class Get_Perf_n_Logs(Resource):
 
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={500: 'internal error'})
+    @limiter.limit("10/minute", key_func = lambda : current_user.username)
     @login_required
     def get(self):
         """
@@ -409,6 +424,11 @@ class Get_Perf_n_Logs(Resource):
             return {"msg_broker_queue": msg_broker_queue,
                     "throughput": throughput,
                     "logs": logs}, 200
+
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Get_Perf_n_Logs API: {rle}")
+            return {}, 429
+        
         except Exception as err:
             logger.error(f"error getting performance and log data: {err}")
             return {"msg_broker_queue": 0,
@@ -431,36 +451,44 @@ class Send_Command(Resource):
     @rest_api_v1.doc(responses={400: 'command not recognized for the device type'})
     @rest_api_v1.doc(responses={404: 'missing ids or device not registered'})
     @rest_api_v1.doc(responses={500: 'internal error'})
+    @limiter.limit("10/minute", key_func = lambda : current_user.username)
     @login_required
     def post(self):
         """
         Forward a general command to any registered device
         """
 
-        SERVER_AVAILABLE_ACTIONS = [
-            "power_on_vms", "power_off_vms", "get_vms_on"]
-        FIREWALL_AVAILABLE_ACTIONS = ["send_command"]
+        try:
+            SERVER_AVAILABLE_ACTIONS = [
+                "power_on_vms", "power_off_vms", "get_vms_on"]
+            FIREWALL_AVAILABLE_ACTIONS = ["send_command"]
 
-        data = request.get_json()
-        action = list(data.keys())[0]
-        dev_ids = data[action]
-        registered_devs = engine_service.get_registered_devices()
-        if dev_ids and any(obj['id'] == dev_ids for obj in registered_devs):
-            dev_type = engine_service.get_registered_device_by_id(dev_ids)[
-                "dev_type"]
-            if (dev_type == "server" and action in SERVER_AVAILABLE_ACTIONS) or \
-                    (dev_type == "firewall" and action in FIREWALL_AVAILABLE_ACTIONS):
+            data = request.get_json()
+            action = list(data.keys())[0]
+            dev_ids = data[action]
+            registered_devs = engine_service.get_registered_devices()
+            if dev_ids and any(obj['id'] == dev_ids for obj in registered_devs):
+                dev_type = engine_service.get_registered_device_by_id(dev_ids)[
+                    "dev_type"]
+                if (dev_type == "server" and action in SERVER_AVAILABLE_ACTIONS) or \
+                        (dev_type == "firewall" and action in FIREWALL_AVAILABLE_ACTIONS):
 
-                res = engine_service.send_to_devices(
-                    list(map(lambda id: {"id": id, "action": action}, dev_ids)))
-                if res:
-                    return {f"{action}": dev_ids}, 200
+                    res = engine_service.send_to_devices(
+                        list(map(lambda id: {"id": id, "action": action}, dev_ids)))
+                    if res:
+                        return {f"{action}": dev_ids}, 200
+                    else:
+                        {'error': f'internal error trying to {action} devices: {dev_ids}'}, 500
                 else:
-                    {'error': f'internal error trying to {action} devices: {dev_ids}'}, 500
+                    {'error': 'command not recognized for the device type'}, 400
             else:
-                {'error': 'command not recognized for the device type'}, 400
-        else:
-            {'error': 'missing ids or device not registered'}, 404
+                {'error': 'missing ids or device not registered'}, 404
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Send_Command API {rle}")
+            return {}, 429
+        except Exception as err:
+            logger.error(f"internal error: {err}")
+            return {}, 500
 
 
 class Get_Command_Result(Resource):
@@ -478,21 +506,29 @@ class Get_Command_Result(Resource):
     })
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={404: 'no actions found'})
+    @limiter.limit("10/minute", key_func = lambda : current_user.username)
     @login_required
     def post(self):
         """
         Get results from a performed list of actions
         """
-        action_ids = request.get_json()["action_ids"]
-        if action_ids:
-            status_list = engine_service.get_action_status(action_ids)
+        try:
+            action_ids = request.get_json()["action_ids"]
+            if action_ids:
+                status_list = engine_service.get_action_status(action_ids)
 
-            result = []
-            for status in status_list:
-                result.append(status)
-            return {"result": result}, 200
-        else:
-            {'error': 'no actions found'}, 404
+                result = []
+                for status in status_list:
+                    result.append(status)
+                return {"result": result}, 200
+            else:
+                {'error': 'no actions found'}, 404
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Get_Command API {rle}")
+            return {}, 429
+        except Exception as err:
+            logger.error(f"internal error: {err}")
+            return {}, 500
 
 
 rest_api_v1.add_resource(Auth_Login, '/auth/login')
