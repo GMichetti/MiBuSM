@@ -25,7 +25,7 @@ from flask_login import login_user, login_required, logout_user, current_user, L
 from .server import app
 from flask_restx import Resource, Api, Namespace, fields
 from .server import db
-from .server import limiter
+# from .server import limiter
 from .server import logger
 from .models import User, Devices
 
