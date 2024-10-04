@@ -29,7 +29,6 @@ except ModuleNotFoundError:
     from ..config_loader import Config_Loader
 config_loader = Config_Loader()
 
-
 try:
     from log import Logger
 except ModuleNotFoundError:
