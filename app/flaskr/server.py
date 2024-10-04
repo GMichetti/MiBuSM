@@ -55,10 +55,9 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # Rate Limiter for API
 limiter = Limiter(
     get_remote_address,
-    app=app,
-    storage_uri=RATE_LIMITER_STORAGE_URI,
+    app=app
+    # storage_uri=RATE_LIMITER_STORAGE_URI,
 )
-
 
 def hide_password(password):
     if password and isinstance(password, str):
