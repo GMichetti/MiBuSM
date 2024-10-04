@@ -41,6 +41,7 @@ class ConfigModel(BaseModel):
     internal_db_devs_list: str = "mibu_devs_list"
     internal_db_action_status_list: str = "mibu_action_status_list"
     internal_db_msg_bkr_stats: str = "mibu_msg_bkr_stats"
+    internal_db_rate_limiter: str = "rate_limiter"
     action_status_sb_pruning_time: PositiveInt = 60     # [minutes]
     log_file_path: str = os.path.join("/var", "log","mibu", "mibu.log") if os.name == 'posix' else os.path.join("C:\\", "var", "log", "mibu","mibu.log")
     log_lock_file: str = os.path.join("/var", "log", "mibu", "mibu.lock") if os.name == 'posix' else os.path.join("C:\\", "var", "log","mibu","mibu.lock")
