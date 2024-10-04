@@ -45,19 +45,19 @@ RATE_LIMITER_STORAGE_URI = config_loader.config["internal_db_host"]
 db = SQLAlchemy()
 app = Flask(__name__, instance_relative_config=True)
 
-# Rate Limiter for API
-# limiter = Limiter(
-#     get_remote_address,
-#     app=app,
-#     storage_uri=RATE_LIMITER_STORAGE_URI,
-# )
-
 # Needed for Prometheus
 metrics = GunicornPrometheusMetrics(app)
 
 basedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "database")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, DB_NAME)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+# Rate Limiter for API
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri=RATE_LIMITER_STORAGE_URI,
+)
 
 
 def hide_password(password):
