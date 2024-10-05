@@ -25,7 +25,7 @@ from flask_login import login_user, login_required, logout_user, current_user, L
 from .server import app
 from flask_restx import Resource, Api, Namespace, fields
 from .server import db
-# from .server import limiter
+from .server import limiter
 from .server import logger
 from .models import User, Devices
 
@@ -304,7 +304,7 @@ class Auth_Login(Resource):
             return {'error': 'User Unauthorized'}, 401
         
 class Reset_Engine(Resource):
-    
+    decorators = [limiter.limit("24 per day", key_func = lambda : current_user.username)]
     @rest_api_v1.doc(responses={500: 'internal error'})
     # @limiter.limit("24 per day", key_func = lambda : current_user.username)
     @login_required
@@ -326,9 +326,9 @@ class Reset_Engine(Resource):
             else:
                 logger.error("can't reset the engine")
                 return {'error': 'reset engine not started'}, 401
-        # except RateLimitExceeded as rle:
-        #     logger.error(f"too many request for reset engine: {rle}")
-        #     return {}, 429
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for reset engine: {rle}")
+            return {}, 429
                 
         except Exception as err:
             logger.error(f"internal error: {err}")
@@ -336,6 +336,7 @@ class Reset_Engine(Resource):
 
 
 class Devices_Info(Resource):
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
@@ -410,6 +411,7 @@ class Set_State(Resource):
 
 class Get_Perf_n_Logs(Resource):
 
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={500: 'internal error'})
     # @limiter.limit("10/minute", key_func = lambda : current_user.username)
@@ -427,9 +429,9 @@ class Get_Perf_n_Logs(Resource):
                     "throughput": throughput,
                     "logs": logs}, 200
 
-        # except RateLimitExceeded as rle:
-        #     logger.error(f"too many request for Get_Perf_n_Logs API: {rle}")
-        #     return {}, 429
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Get_Perf_n_Logs API: {rle}")
+            return {}, 429
         
         except Exception as err:
             logger.error(f"error getting performance and log data: {err}")
@@ -440,6 +442,7 @@ class Get_Perf_n_Logs(Resource):
 
 class Send_Command(Resource):
     
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
     @rest_api_v1.doc(params={
         'action': {
             'description': 'action performed against a list of device to interact with thee OS',
@@ -486,9 +489,9 @@ class Send_Command(Resource):
             else:
                 {'error': 'missing ids or device not registered'}, 404
 
-        # except RateLimitExceeded as rle:
-        #     logger.error(f"too many request for Send_Command API {rle}")
-        #     return {}, 429
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Send_Command API {rle}")
+            return {}, 429
         
         except Exception as err:
             logger.error(f"internal error: {err}")
@@ -496,6 +499,8 @@ class Send_Command(Resource):
 
 
 class Get_Command_Result(Resource):
+
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
 
     @rest_api_v1.doc(params={
         'action_ids': {
@@ -528,9 +533,9 @@ class Get_Command_Result(Resource):
             else:
                 {'error': 'no actions found'}, 404
 
-        # except RateLimitExceeded as rle:
-        #     logger.error(f"too many request for Get_Command API {rle}")
-        #     return {}, 429
+        except RateLimitExceeded as rle:
+            logger.error(f"too many request for Get_Command API {rle}")
+            return {}, 429
         
         except Exception as err:
             logger.error(f"internal error: {err}")
