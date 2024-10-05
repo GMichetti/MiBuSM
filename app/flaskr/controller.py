@@ -304,7 +304,7 @@ class Auth_Login(Resource):
             return {'error': 'User Unauthorized'}, 401
         
 class Reset_Engine(Resource):
-    decorators = [limiter.limit("24 per day", key_func = lambda : current_user.username)]
+    decorators = [limiter.limit("24 per day", key_func = lambda : current_user)]
     @rest_api_v1.doc(responses={500: 'internal error'})
     # @limiter.limit("24 per day", key_func = lambda : current_user.username)
     @login_required
@@ -336,7 +336,7 @@ class Reset_Engine(Resource):
 
 
 class Devices_Info(Resource):
-    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user)]
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
@@ -411,7 +411,7 @@ class Set_State(Resource):
 
 class Get_Perf_n_Logs(Resource):
 
-    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user)]
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={500: 'internal error'})
     # @limiter.limit("10/minute", key_func = lambda : current_user.username)
@@ -442,7 +442,7 @@ class Get_Perf_n_Logs(Resource):
 
 class Send_Command(Resource):
     
-    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user)]
     @rest_api_v1.doc(params={
         'action': {
             'description': 'action performed against a list of device to interact with thee OS',
@@ -500,7 +500,7 @@ class Send_Command(Resource):
 
 class Get_Command_Result(Resource):
 
-    decorators = [limiter.limit("10/minute", key_func = lambda : current_user.username)]
+    decorators = [limiter.limit("10/minute", key_func = lambda : current_user)]
 
     @rest_api_v1.doc(params={
         'action_ids': {
