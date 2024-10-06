@@ -341,7 +341,7 @@ class Devices_Info(Resource):
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.user, on_breach = lambda RequestLimit : jsonify({"error": "what are tryin' to do?"}))
+    @limiter.limit("10/minute", key_func = lambda : current_user.user, on_breach = lambda : jsonify({"error": "what are tryin' to do?"}))
     @login_required
     def get(self):
         """
