@@ -19,6 +19,8 @@ import os
 import jinja2
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
 try:
@@ -51,6 +53,12 @@ metrics = GunicornPrometheusMetrics(app)
 basedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "database")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, DB_NAME)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+# Rate Limiter for API
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri=f"mongodb://{RL_HOST}:{RL_PORT}")
 
 def hide_password(password):
     if password and isinstance(password, str):

@@ -25,6 +25,7 @@ from flask_login import login_user, login_required, logout_user, current_user, L
 from .server import app
 from flask_restx import Resource, Api, Namespace, fields
 from .server import db
+from .server import limiter
 from .server import logger
 from .models import User, Devices
 
@@ -41,20 +42,9 @@ api = Api(app, version='1.0',
           doc='/docs/',
           prefix="/api/")
 
-
-
 login_manager = LoginManager(app)
+
 login_manager.login_view = 'login'
-
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from .server import RL_DB,RL_HOST,RL_PORT
-
-# Rate Limiter for API
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    storage_uri=f"mongodb://{RL_HOST}:{RL_PORT}/{RL_DB}")
 
 engine_service = service.Service()
 engine_service.initialize()
