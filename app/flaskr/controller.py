@@ -325,11 +325,7 @@ class Reset_Engine(Resource):
                     logger.error("can't register devices")
             else:
                 logger.error("can't reset the engine")
-                return {'error': 'reset engine not started'}, 401
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for reset engine: {rle}")
-            return {}, 429
-                
+                return {'error': 'reset engine not started'}, 401                
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
@@ -341,7 +337,7 @@ class Devices_Info(Resource):
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.user, on_breach = lambda : jsonify({"error": "what are tryin' to do?"}))
+    @limiter.limit("10/minute", key_func = lambda : current_user.user)
     @login_required
     def get(self):
         """
@@ -427,10 +423,6 @@ class Get_Perf_n_Logs(Resource):
                     "throughput": throughput,
                     "logs": logs}, 200
 
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Get_Perf_n_Logs API: {rle}")
-            return {}, 429
-        
         except Exception as err:
             logger.error(f"error getting performance and log data: {err}")
             return {"msg_broker_queue": 0,
@@ -485,10 +477,6 @@ class Send_Command(Resource):
                     {'error': 'command not recognized for the device type'}, 400
             else:
                 {'error': 'missing ids or device not registered'}, 404
-
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Send_Command API {rle}")
-            return {}, 429
         
         except Exception as err:
             logger.error(f"internal error: {err}")
@@ -528,10 +516,6 @@ class Get_Command_Result(Resource):
             else:
                 {'error': 'no actions found'}, 404
 
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Get_Command API {rle}")
-            return {}, 429
-        
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
