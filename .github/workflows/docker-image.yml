@@ -8,24 +8,53 @@ on:
 
 jobs:
 
-  build:
+  build_and_test:
     runs-on: ubuntu-22.04
-
+    services:
+      docker:
+        image: docker:20.10.9
+        options: --privileged # grants elevated privileges. Necessary for the test
     steps:
+
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Start Containers
       run: |
         docker compose -f "docker-compose.yml" up -d --build
-      
+        sleep 30
+
+    - name: REST API Test
+      run: |
+        DST_IP_ADDR="http://localhost:80"
+        EXPECTED_RESPONSE='{"reset engine": "started"}'
+        curl -X POST \
+          -d '{"username":"JackBurton","password":"Ch@ngeMe!"}' \
+          -H "Content-Type: application/json" \
+          -c cookie.txt \
+          $DST_IP_ADDR/api/v1/auth/login
+        RESPONSE=$(curl  -X GET \
+          -b cookie.txt \
+          $DST_IP_ADDR/api/v1/reset_engine)
+        if [ "$RESPONSE" == "$EXPECTED_RESPONSE" ]; then
+            echo "Test Passed: Service returned expected response."
+            echo "Expected: $EXPECTED_RESPONSE"
+            echo "Actual: $RESPONSE"
+            exit 0
+        else
+            echo "Test Failed: Service response did not match expected response."
+            echo "Expected: $EXPECTED_RESPONSE"
+            echo "Actual: $RESPONSE"
+            exit 1
+        fi
+
     - name: Stop Containers
       if: always()
       run: docker compose -f "docker-compose.yml" down
 
   deploy:
     runs-on: ubuntu-22.04
-    needs: build 
+    needs: build_and_test
     steps:         
 
       - name: Deploy to Remote Server via SSH
