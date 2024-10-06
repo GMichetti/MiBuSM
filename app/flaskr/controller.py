@@ -20,7 +20,7 @@ try:
 except ModuleNotFoundError:
     from ..engine import service
     
-from flask import render_template, request, redirect, session, url_for
+from flask import render_template, request, redirect, session, url_for, jsonify
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager
 from .server import app
 from flask_restx import Resource, Api, Namespace, fields
@@ -341,7 +341,7 @@ class Devices_Info(Resource):
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.user)
+    @limiter.limit("10/minute", key_func = lambda : current_user.user, on_breach = lambda RequestLimit : jsonify({"error": "what are tryin' to do?"}))
     @login_required
     def get(self):
         """
@@ -357,9 +357,7 @@ class Devices_Info(Resource):
                     return {"error": "no data found"}, 400
             else:
                 return {"error:": "no registered devices"}, 404
-        except RateLimitExceeded as rle:
-            logger.error(f"too many request for Devices_Info API {rle}")
-            return {"message": "Hey, what are you trying to do, man?!?"}, 429
+
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
