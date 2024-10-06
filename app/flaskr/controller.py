@@ -306,7 +306,7 @@ class Auth_Login(Resource):
 class Reset_Engine(Resource):
 
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("24 per day", key_func = lambda : current_user.username)
+    @limiter.limit("24 per day", key_func = lambda : current_user.user)
     @login_required
     def get(self):
         """
@@ -341,7 +341,7 @@ class Devices_Info(Resource):
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    # @limiter.limit("10/minute", key_func = lambda : current_user.username)
+    @limiter.limit("10/minute", key_func = lambda : current_user.user)
     @login_required
     def get(self):
         """
@@ -414,7 +414,7 @@ class Get_Perf_n_Logs(Resource):
 
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.username)
+    @limiter.limit("10/minute", key_func = lambda : current_user.user)
     @login_required
     def get(self):
         """
@@ -455,7 +455,7 @@ class Send_Command(Resource):
     @rest_api_v1.doc(responses={400: 'command not recognized for the device type'})
     @rest_api_v1.doc(responses={404: 'missing ids or device not registered'})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.username)
+    @limiter.limit("10/minute", key_func = lambda : current_user.user)
     @login_required
     def post(self):
         """
@@ -512,7 +512,7 @@ class Get_Command_Result(Resource):
     })
     @rest_api_v1.doc(responses={200: "data"})
     @rest_api_v1.doc(responses={404: 'no actions found'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.username)
+    @limiter.limit("10/minute", key_func = lambda : current_user.user)
     @login_required
     def post(self):
         """
