@@ -234,7 +234,7 @@ def devices():
 
 @app.route('/reload_devices', methods=['GET', 'POST'])
 @login_required
-def reloald_devices():
+def reload_devices():
     """
     Reload the devices inside the engine without adding/removing
     """
@@ -304,7 +304,7 @@ class Auth_Login(Resource):
             return {'error': 'User Unauthorized'}, 401
         
 class Reset_Engine(Resource):
-    
+
     @rest_api_v1.doc(responses={500: 'internal error'})
     @limiter.limit("24 per day", key_func = lambda : current_user.username)
     @login_required
@@ -341,7 +341,7 @@ class Devices_Info(Resource):
     @rest_api_v1.doc(responses={400: 'no data found'})
     @rest_api_v1.doc(responses={404: 'no registered devices'})
     @rest_api_v1.doc(responses={500: 'internal error'})
-    @limiter.limit("10/minute", key_func = lambda : current_user.username)
+    # @limiter.limit("10/minute", key_func = lambda : current_user.username)
     @login_required
     def get(self):
         """
