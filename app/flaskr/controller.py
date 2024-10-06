@@ -359,7 +359,7 @@ class Devices_Info(Resource):
                 return {"error:": "no registered devices"}, 404
         except RateLimitExceeded as rle:
             logger.error(f"too many request for Devices_Info API {rle}")
-            return {}, 429
+            return {"message": "Hey, what are you trying to do, man?!?"}, 429
         except Exception as err:
             logger.error(f"internal error: {err}")
             return {}, 500
