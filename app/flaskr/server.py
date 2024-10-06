@@ -58,7 +58,8 @@ app.config['SECRET_KEY'] = SECRET_KEY
 limiter = Limiter(
     get_remote_address,
     app=app,
-    storage_uri=f"mongodb://{RL_HOST}:{RL_PORT}")
+    storage_uri="memory://")
+    # storage_uri=f"mongodb://{RL_HOST}:{RL_PORT}")
 
 def hide_password(password):
     if password and isinstance(password, str):
