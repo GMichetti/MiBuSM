@@ -84,8 +84,8 @@ jobs:
             docker compose down   
             docker compose -f "docker-compose.yml" up -d --build
       
-      - name: 10 seconds Delay 
-        run: sleep 10
+      - name: 30 seconds Delay 
+        run: sleep 30
         
       - name: "engine reset"   
         uses: appleboy/ssh-action@v0.1.3
