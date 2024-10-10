@@ -56,7 +56,7 @@ class ConfigModel(BaseModel):
     auto_max_time_delta: PositiveInt = 70
     action_retry_delay: PositiveInt = 1
     action_retry_tries: PositiveInt = 2
-    worker_timeout: PositiveInt = 30
+    worker_timeout: PositiveInt = 5
     default_user_password: str = "Ch@ngeMe!"
 
 
