@@ -2,13 +2,7 @@
 bind = '0.0.0.0:8000'
 
 # To share workload to multilpe CPU cores (in this case 3)
-workers = 3
-
-# Using workers thread based
-worker_class = 'gthread'
-
-# Number of threads per Worker
-threads = 2 
+workers = 2
 
 # Loading the application just one time to lower memory utilization
 preload_app = True
