@@ -58,6 +58,11 @@ class ConfigModel(BaseModel):
     action_retry_tries: PositiveInt = 2
     worker_timeout: PositiveInt = 5
     default_user_password: str = "Ch@ngeMe!"
+    gunicorn_bind: str = "0.0.0.0:8000"
+    gunicorn_workers: NonNegativeInt = 2
+    gunicorn_worker_class: str = "gthread"
+    gunicorn_workers_thread: NonNegativeInt = 2
+
 
 
     @validator("auto_max_time_delta", pre=True, always=True, check_fields=True)

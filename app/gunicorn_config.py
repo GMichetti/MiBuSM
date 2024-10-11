@@ -1,15 +1,28 @@
+try:
+    from config_loader import Config_Loader
+except ModuleNotFoundError:
+    from .config_loader import Config_Loader
+
+
+config_loader = Config_Loader()
+
+GUNICORN_BIND = config_loader.config["gunicorn_bind"]
+WORKERS = config_loader.config["gunicorn_workers"]
+WORKERS__CLASS = config_loader.config["gunicorn_worker_class"]
+WORKERS_THREAD = config_loader.config["gunicorn_workers_thread"]
+
+
 # Binding Flask app 
-bind = '0.0.0.0:8000'
+bind = GUNICORN_BIND
 
 # To share workload to multilpe CPU cores (in this case 3)
-workers = 2
+workers = WORKERS
 
 # Using workers thread based
-worker_class = 'gthread'
-
+worker_class = WORKERS__CLASS
 
 # Number of threads per Worker
-threads = 2 
+threads = WORKERS_THREAD
 
 # Loading the application just one time to lower memory utilization
 preload_app = True
