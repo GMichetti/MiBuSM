@@ -8,18 +8,18 @@ config_loader = Config_Loader()
 
 GUNICORN_BIND = config_loader.config["gunicorn_bind"]
 WORKERS = config_loader.config["gunicorn_workers"]
-WORKERS__CLASS = config_loader.config["gunicorn_worker_class"]
+WORKERS_CLASS = config_loader.config["gunicorn_worker_class"]
 WORKERS_THREAD = config_loader.config["gunicorn_workers_thread"]
 
 
 # Binding Flask app 
 bind = GUNICORN_BIND
 
-# To share workload to multilpe CPU cores (in this case 3)
+# To share workload to multilpe CPU cores
 workers = WORKERS
 
 # Using workers thread based
-worker_class = WORKERS__CLASS
+worker_class = WORKERS_CLASS
 
 # Number of threads per Worker
 threads = WORKERS_THREAD
