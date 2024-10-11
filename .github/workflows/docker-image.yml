@@ -68,13 +68,13 @@ jobs:
           script: |
             DST_IP_ADDR="${{ secrets.LOCAL_ADDR }}"
             if [ ! -d "/home/ubuntu/Server" ]; then
-              git clone -b develop git@github.com:GMichetti/MiBuSM.git /home/ubuntu/Server
+              git clone -b main git@github.com:GMichetti/MiBuSM.git /home/ubuntu/Server
             else
               cd /home/ubuntu/Server
               git pull origin main
             fi
             cd /home/ubuntu/Server
-            git pull origin develop
+            git pull origin main
             if [ -d "/home/ubuntu/tmp_mibu_db" ]; then
               cd /home/ubuntu/tmp_mibu_db
               cp db.sqlite ../Server/app/flaskr/database/
