@@ -150,14 +150,14 @@ function buildHisto(dev) {
     }
     if (dev["type"] == "server") {
 
-        system_t = []
+        // system_t = []
         cpu_used = []
         memory_used = []
         resTimestamp = []
         if (dev.hasOwnProperty("get_info")) {
             dev["get_info"].forEach((el) => {
 
-                (el["result"]["result"].hasOwnProperty("hw_info")) ? system_t.push(el["result"]["result"]["hw_info"]["systemHealthInfo"].find(el => el.sensor_name ==="System Board 1 Ambient Temp").valueReading / 100) : system_t.push(0);
+                // (el["result"]["result"].hasOwnProperty("hw_info")) ? system_t.push(el["result"]["result"]["hw_info"]["systemHealthInfo"].find(el => el.sensor_name ==="System Board 1 Ambient Temp").valueReading / 100) : system_t.push(0);
                 (el["result"]["result"].hasOwnProperty("hw_info")) ? cpu_used.push(el["result"]["result"]["hw_info"]["quickStats"]["overallCpuUsage"] / (Math.pow(10, 3))) : cpu_used.push(0);
                 (el["result"]["result"].hasOwnProperty("hw_info")) ? memory_used.push(el["result"]["result"]["hw_info"]["quickStats"]["overallMemoryUsage"] / 1024) : memory_used.push(0);
                 resTimestamp.push((new Date(el["res_timestamp"] * 1000)).toLocaleString())
@@ -167,7 +167,7 @@ function buildHisto(dev) {
                 charts[id].data.labels = resTimestamp
                 charts[id].data.datasets[0].data = cpu_used;
                 charts[id].data.datasets[1].data = memory_used;
-                charts[id].data.datasets[2].data = system_t;
+                // charts[id].data.datasets[2].data = system_t;
                 charts[id].update();
             }
             else {
@@ -186,14 +186,14 @@ function buildHisto(dev) {
                             label: "MEMORY (usage Gb)",
                             data: memory_used,
                             lineTension: 0.5,
-                            borderColor: "rgba(255, 255, 255, .5)"
-                        },
-                        {
-                            label: "SYSTEM TEMP (degrees C)",
-                            data: system_t,
-                            lineTension: 0.5,
-                            borderColor: "rgba(235, 22, 22, .5)"
-                        }
+                            borderColor: "rgba(255, 255, 255, .5)"}
+                        // ,
+                        // {
+                        //     label: "SYSTEM TEMP (degrees C)",
+                        //     data: system_t,
+                        //     lineTension: 0.5,
+                        //     borderColor: "rgba(235, 22, 22, .5)"
+                        // }
                         ]
                     },
                     options: {
