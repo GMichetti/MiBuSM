@@ -166,8 +166,8 @@ function buildHisto(dev) {
             if (charts[id]) {
                 charts[id].data.labels = resTimestamp
                 charts[id].data.datasets[0].data = cpu_used;
-                charts[id].data.datasets[1].data = system_t;
-                charts[id].data.datasets[2].data = memory_used;
+                charts[id].data.datasets[1].data = memory_used;
+                charts[id].data.datasets[2].data = system_t;
                 charts[id].update();
             }
             else {
