@@ -149,13 +149,16 @@ function buildHisto(dev) {
         }
     }
     if (dev["type"] == "server") {
-        cpu_frq = []
+
+        system_t = []
         cpu_used = []
         memory_used = []
         resTimestamp = []
         if (dev.hasOwnProperty("get_info")) {
             dev["get_info"].forEach((el) => {
-                (el["result"]["result"].hasOwnProperty("hw_info")) ? cpu_frq.push(el["result"]["result"]["hw_info"]["cpuMhz"] / (Math.pow(10, 3))) : cpu_frq.push(0);
+
+                // (el["result"]["result"].hasOwnProperty("hw_info")) ? cpu_frq.push(el["result"]["result"]["hw_info"]["cpuMhz"] / (Math.pow(10, 3))) : cpu_frq.push(0);
+                (el["result"]["result"].hasOwnProperty("hw_info")) ? system_t.push(el["result"]["result"]["hw_info"]["systemHealtInfo"].find(el => el.sensor_name ==="System Board 1 Ambient Temp").valueReading).toString().substring(0,2) : system_t.push(0);
                 (el["result"]["result"].hasOwnProperty("hw_info")) ? cpu_used.push(el["result"]["result"]["hw_info"]["quickStats"]["overallCpuUsage"] / (Math.pow(10, 3))) : cpu_used.push(0);
                 (el["result"]["result"].hasOwnProperty("hw_info")) ? memory_used.push(el["result"]["result"]["hw_info"]["quickStats"]["overallMemoryUsage"] / 1024) : memory_used.push(0);
                 resTimestamp.push((new Date(el["res_timestamp"] * 1000)).toLocaleString())
@@ -164,7 +167,7 @@ function buildHisto(dev) {
             if (charts[id]) {
                 charts[id].data.labels = resTimestamp
                 charts[id].data.datasets[0].data = cpu_used;
-                charts[id].data.datasets[1].data = cpu_frq;
+                charts[id].data.datasets[1].data = system_t;
                 charts[id].data.datasets[2].data = memory_used;
                 charts[id].update();
             }
@@ -181,16 +184,16 @@ function buildHisto(dev) {
                             borderColor: "rgba(25, 135, 84, .5)"
                         },
                         {
-                            label: "CPU (frequency Ghz)",
-                            data: cpu_frq,
-                            lineTension: 0.5,
-                            borderColor: "rgba(235, 22, 22, .5)"
-                        },
-                        {
                             label: "MEMORY (usage Gb)",
                             data: memory_used,
                             lineTension: 0.5,
                             borderColor: "rgba(255, 255, 255, .5)"
+                        },
+                        {
+                            label: "SYSTEM TEMP (degrees C)",
+                            data: system_t,
+                            lineTension: 0.5,
+                            borderColor: "rgba(235, 22, 22, .5)"
                         }
                         ]
                     },

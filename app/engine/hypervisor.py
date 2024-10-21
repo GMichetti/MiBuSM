@@ -170,7 +170,7 @@ class ESXi(HyperVisor):
                         "uptime": self._esxihost.summary.quickStats.uptime
                     },
                     "bootTime": str(self._esxihost.runtime.bootTime),
-                    "systemHealthInfo": [{"sensor_name": sensor.name, "status": sensor.currentReading} for sensor in self._esxihost.runtime.healthSystemRuntime.systemHealthInfo.numericSensorInfo]
+                    "systemHealthInfo": [{"sensor_name": sensor.name, "valueReading": sensor.currentReading} for sensor in self._esxihost.runtime.healthSystemRuntime.systemHealthInfo.numericSensorInfo]
                 },
                 "vm_info": [
                     {
