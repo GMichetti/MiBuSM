@@ -158,7 +158,7 @@ function buildHisto(dev) {
             dev["get_info"].forEach((el) => {
 
                 // (el["result"]["result"].hasOwnProperty("hw_info")) ? cpu_frq.push(el["result"]["result"]["hw_info"]["cpuMhz"] / (Math.pow(10, 3))) : cpu_frq.push(0);
-                (el["result"]["result"].hasOwnProperty("hw_info")) ? system_t.push(el["result"]["result"]["hw_info"]["systemHealthInfo"].find(el => el.sensor_name ==="System Board 1 Ambient Temp").valueReading).toString().substring(0,2) : system_t.push(0);
+                (el["result"]["result"].hasOwnProperty("hw_info")) ? system_t.push(el["result"]["result"]["hw_info"]["systemHealthInfo"].find(el => el.sensor_name ==="System Board 1 Ambient Temp").valueReading)/1000 : system_t.push(0);
                 (el["result"]["result"].hasOwnProperty("hw_info")) ? cpu_used.push(el["result"]["result"]["hw_info"]["quickStats"]["overallCpuUsage"] / (Math.pow(10, 3))) : cpu_used.push(0);
                 (el["result"]["result"].hasOwnProperty("hw_info")) ? memory_used.push(el["result"]["result"]["hw_info"]["quickStats"]["overallMemoryUsage"] / 1024) : memory_used.push(0);
                 resTimestamp.push((new Date(el["res_timestamp"] * 1000)).toLocaleString())
